@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<title>Блок Progress</title>
+<link rel="stylesheet" href="style.css">
+<script defer src="progress.js"></script>
+</head>
+<body>
+    <div class="progress">
+        <p class="progress__title">Progress</p>
+        <div class="progress__container">
+            <div class="progress__bar"></div>
+            <div class="progress__settings">
+                <label>
+                    <input type="number" min="0" max="100" value="0"class="value-input">
+                    Value
+                </label>
+                <label class="toggle">
+                    <input type="checkbox" class="toggle__checkbox animate-toggle">
+                    <span class="toggle__span"></span>
+                    Animate
+                </label>
+                <label class="toggle">
+                    <input type="checkbox" class="toggle__checkbox hide-toggle">
+                    <span class="toggle__span"></span>
+                    Hide
+                </label>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
