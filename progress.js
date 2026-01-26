@@ -1,26 +1,31 @@
-const progressBar = document.querySelector('.progress__bar');
-const valueInput = document.querySelector('.value-input');
-const animateToggle = document.querySelector('.animate-toggle');
-const hideToggle = document.querySelector('.hide-toggle');
+class Progress {
+    constructor(min = 0, max = 100, value = 0) {
+        this.min = min;
+        this.max = max;
+        this.value = this._clamp(value, min, max);
+        this.isAnimated = false;
+        this.isHidden = false;
+    }
 
-const minNum = Number(valueInput.min);
-const maxNum = Number(valueInput.max);
+    _clamp(n, min, max) {
+        return Math.min(max, Math.max(min, n));
+    }
 
-function clamp(n, min, max) {
-    return Math.min(max, Math.max(min, n));
+    setValue(value) {
+        this.value = this._clamp(value, this.min, this.max);
+    }
+
+    setAnimation(enabled) {
+        this.isAnimated = enabled;
+    }
+
+    setVisibility(visible) {
+        this.isHidden = !visible;
+    }
+
+    getAngle() {
+        return (this.value / this.max) * 360;
+    }
 }
 
-valueInput.addEventListener('input', function() {
-    let numberValue = Number(this.value) || 0;
-    this.value = clamp(numberValue, minNum, maxNum);
-    progressBar.style.background = 
-        `conic-gradient(#005dff ${numberValue * 360 / maxNum}deg, #eef3f6 0deg)`;
-});
-
-animateToggle.addEventListener('change', function () {
-    progressBar.classList.toggle('progress-bar-animated', this.checked);
-});
-
-hideToggle.addEventListener('change', function () {
-    progressBar.classList.toggle('progress-bar-hidden', this.checked);
-});
+export default Progress;
