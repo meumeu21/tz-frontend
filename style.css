@@ -15,15 +15,15 @@ input::-webkit-inner-spin-button {
 
 .progress {
     background-color: var(--bg-color);
-    width: 320px;
+    max-width: 320px;
     font-family: 'Inter', sans-serif;
     color: var(--font-color);
     font-size: 16px;
-    margin: 0 auto;
 }
 
 .progress__title {
     margin: 0;
+    text-align: left;
 }
 
 .progress__container {
@@ -31,23 +31,25 @@ input::-webkit-inner-spin-button {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    gap: 96px;
+    margin-top: 32px;
+    margin-bottom: 96px;
 }
 
 .progress__bar {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 140px;
-    height: 140px;
+    width: 130px;
+    height: 130px;
     background: conic-gradient(var(--primary-color) 0deg, var(--pb-disabled) 0deg);
     border-radius: 50%;
-    margin: 48px 0 48px;
 }
 
-.progress__bar::after {
+.progress__bar:after {
     content: '';
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     background-color: var(--bg-color);
     border-radius: 50%;
 }
@@ -56,8 +58,7 @@ input::-webkit-inner-spin-button {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 120px;
-    margin: 48px 0 84px;
+    height: 110px;
 }
 
 .value-input {
@@ -134,17 +135,9 @@ input::-webkit-inner-spin-button {
 
 @media (orientation: landscape) {
     .progress {
-        width: 568px;
+        max-width: 568px;
     }
     .progress__container {
         flex-direction: row;
-    }
-
-    .progress__bar {
-        margin: 48px 96px 64px 0;
-    }
-
-    .progress__settings {
-        margin: 48px 0 64px;
     }
 }
