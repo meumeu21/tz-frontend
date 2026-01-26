@@ -42,7 +42,12 @@ class App {
 
     _renderHideToggle() {
         this.hideToggle.checked = this.progress.isHidden;
-        this.progressBar.classList.toggle('progress-bar-hidden', this.progress.isHidden);
+        if (this.progress.isHidden) {
+            this.progressBar.style.background = "unset";
+        } else {
+            this.progressBar.style.background =
+                `conic-gradient(#005dff ${this.progress.getAngle()}deg, #eef3f6 0deg)`;
+        }
     }
 
     setValue(value) {

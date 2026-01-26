@@ -129,10 +129,6 @@ input::-webkit-inner-spin-button {
     animation: spin var(--time-animation) linear infinite;
 }
 
-.progress-bar-hidden {
-    display: none;
-}
-
 @media (orientation: landscape) {
     .progress {
         max-width: 568px;
