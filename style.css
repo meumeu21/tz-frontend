@@ -1,139 +1,117 @@
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+:root {
+    --color-primary: #005dff;
+    --color-text: #000000;
+    --color-bg: #ffffff;
+    --color-toggle-off: #dfe6f0;
+    --color-toggle-knob: #ffffff;
+    --controls-gap: 15px;
+}
+
+.panel {
+    max-width: 320px;
+    height: 568px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+}
+
+.panel__title {
+    margin: 0;
+    font-size: inherit;
+    font-weight: normal;
+}
+
+.panel__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 96px;
+    margin-block: 32px 96px;
+}
+
+.panel__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.field {
+    display: flex;
+    align-items: center;
+    gap: var(--controls-gap);
+}
+
+.field__input {
+    width: 44px;
+    height: 26px;
+    border: 1px solid var(--color-text);
+    border-radius: 20px;
+    font: inherit;
+    text-align: center;
+}
+
+.field__input::-webkit-outer-spin-button,
+.field__input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-:root {
-    --primary-color: #005dff;
-    --pb-disabled: #eef3f6;
-    --toggle-disabled: #dfe6f0;
-    --bg-color: #ffffff;
-    --font-color: #000000;
-    --time-animation: 2s;
-}
-
-.progress {
-    background-color: var(--bg-color);
-    max-width: 320px;
-    font-family: 'Inter', sans-serif;
-    color: var(--font-color);
-    font-size: 16px;
-}
-
-.progress__title {
-    margin: 0;
-    text-align: left;
-}
-
-.progress__container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 96px;
-    margin-top: 32px;
-    margin-bottom: 96px;
-}
-
-.progress__bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 130px;
-    height: 130px;
-    background: conic-gradient(var(--primary-color) 0deg, var(--pb-disabled) 0deg);
-    border-radius: 50%;
-}
-
-.progress__bar:after {
-    content: '';
-    width: 110px;
-    height: 110px;
-    background-color: var(--bg-color);
-    border-radius: 50%;
-}
-
-.progress__settings {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 110px;
-}
-
-.value-input {
-    width: 44px;
-    height: 26px;
-    border: 1px solid var(--font-color);
-    border-radius: 20px;
-    outline: none;
-    text-align: center;
-    font-size: 16px;
-    margin-right: 15px;
-}
-
 .toggle {
-	position: relative;
+    --toggle-width: 48px;
+    --toggle-height: 30px;
+    --toggle-knob-size: 27px;
+    --toggle-knob-offset: 2px;
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--controls-gap);
+    cursor: pointer;
 }
 
-.toggle__checkbox {
-	display: block;
-	width: 0;
-	height: 0;
-	position: absolute;
-	z-index: -1;
-	opacity: 0;
+.toggle__input {
+    position: absolute;
+    opacity: 0;
 }
 
-.toggle__span {
-	display: inline-block;
-	width: 48px;
-	height: 30px;
-	border-radius: 20px;
-	vertical-align: middle;
-	background: var(--toggle-disabled);
-    margin-right: 15px;
-	transition: .2s;
+.toggle__track {
+    position: relative;
+    width: var(--toggle-width);
+    height: var(--toggle-height);
+    border-radius: calc(var(--toggle-height) / 2);
+    background-color: var(--color-toggle-off);
+    transition: background-color 0.2s;
 }
 
-.toggle__span:before {
-	content: '';
-	position: absolute;
-	top: 1.5px;
-	left: 2px;
-	width: 27px;
-	height: 27px;
-	border-radius: 50%;
-	background: var(--bg-color);
-	transition: .2s;
+.toggle__track::before {
+    content: '';
+    position: absolute;
+    top: calc((var(--toggle-height) - var(--toggle-knob-size)) / 2);
+    left: var(--toggle-knob-offset);
+    width: var(--toggle-knob-size);
+    height: var(--toggle-knob-size);
+    border-radius: 50%;
+    background-color: var(--color-toggle-knob);
+    transition: transform 0.2s;
 }
 
-.toggle__checkbox:checked + .toggle__span {
-	background: var(--primary-color);
+.toggle__input:checked + .toggle__track {
+    background-color: var(--color-primary);
 }
 
-.toggle__checkbox:checked + .toggle__span:before{
-	transform: translateX(17px);
-}
-
-.toggle__checkbox + .toggle__span {
-	cursor: pointer;
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-.progress-bar-animated {
-    animation: spin var(--time-animation) linear infinite;
+.toggle__input:checked + .toggle__track::before {
+    transform: translateX(calc(var(--toggle-width) - var(--toggle-knob-size) - 2 * var(--toggle-knob-offset)));
 }
 
 @media (orientation: landscape) {
-    .progress {
+    .panel {
         max-width: 568px;
+        height: 320px;
     }
-    .progress__container {
+
+    .panel__content {
         flex-direction: row;
     }
 }
