@@ -1,0 +1,40 @@
+.progress {
+    --progress-size: 130px;
+    --progress-thickness: 10px;
+    --progress-color: #005dff;
+    --progress-track: #eef3f6;
+    --progress-duration: 2s;
+    
+    --progress-value: 0;
+
+    display: block;
+    width: var(--progress-size);
+    height: var(--progress-size);
+    border-radius: 50%;
+    background: conic-gradient(
+        var(--progress-color) calc(var(--progress-value) * 1%),
+        var(--progress-track) 0
+    );
+    -webkit-mask: radial-gradient(
+        farthest-side,
+        transparent calc(100% - var(--progress-thickness)),
+        #000 calc(100% - var(--progress-thickness))
+    );
+    mask: radial-gradient(
+        farthest-side,
+        transparent calc(100% - var(--progress-thickness)),
+        #000 calc(100% - var(--progress-thickness))
+    );
+}
+
+.progress_animated {
+    animation: progress-spin var(--progress-duration) linear infinite;
+}
+
+.progress_hidden {
+    visibility: hidden;
+}
+
+@keyframes progress-spin {
+    to { transform: rotate(360deg); }
+}

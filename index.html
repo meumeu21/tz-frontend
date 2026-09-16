@@ -3,31 +3,32 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Блок Progress</title>
+<link rel="stylesheet" href="progress/progress.css">
 <link rel="stylesheet" href="style.css">
 <script type="module" src="app.js"></script>
 </head>
 <body>
-    <div class="progress">
-        <p class="progress__title">Progress</p>
-        <div class="progress__container">
-            <div class="progress__bar"></div>
-            <div class="progress__settings">
-                <label>
-                    <input type="number" min="0" max="100" value="0"class="value-input">
-                    Value
-                </label>
-                <label class="toggle">
-                    <input type="checkbox" class="toggle__checkbox animate-toggle">
-                    <span class="toggle__span"></span>
-                    Animate
-                </label>
-                <label class="toggle">
-                    <input type="checkbox" class="toggle__checkbox hide-toggle">
-                    <span class="toggle__span"></span>
-                    Hide
-                </label>
-            </div>
+<main class="panel">
+    <h1 class="panel__title">Progress</h1>
+    <div class="panel__content">
+        <div class="panel__progress"></div>
+        <div class="panel__controls">
+            <label class="field">
+                <input class="field__input" type="number" min="0" max="100" value="0">
+                <span class="field__label">Value</span>
+            </label>
+            <label class="toggle">
+                <input class="toggle__input panel__animation" type="checkbox">
+                <span class="toggle__track"></span>
+                <span class="toggle__label">Animate</span>
+            </label>
+            <label class="toggle">
+                <input class="toggle__input panel__visibility" type="checkbox">
+                <span class="toggle__track"></span>
+                <span class="toggle__label">Hide</span>
+            </label>
         </div>
     </div>
+</main>
 </body>
 </html>
