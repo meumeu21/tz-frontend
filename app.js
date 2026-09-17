@@ -1,71 +1,119 @@
-import Progress from './progress.js';
+import Progress from './progress/progress.js';
 
 class App {
-    constructor() {
-        this.progress = new Progress(0, 100, 0);
-        
-        this.progressBar = document.querySelector('.progress__bar');
-        this.valueInput = document.querySelector('.value-input');
-        this.animateToggle = document.querySelector('.animate-toggle');
-        this.hideToggle = document.querySelector('.hide-toggle');
-        
-        this._bindEvents();
-    }
+    static #PROGRESS_SELECTOR = '.panel__progress';
+    static #VALUE_SELECTOR = '.field__input';
+    static #ANIMATE_SELECTOR = '.panel__animation';
+    static #HIDE_SELECTOR = '.panel__visibility';
 
-    _bindEvents() {
-        this.valueInput.addEventListener('input', (e) => {
-            this.progress.setValue(Number(e.target.value) || 0);
-            this._renderProgressBarValue();
-        });
-        
-        this.animateToggle.addEventListener('change', (e) => {
-            this.progress.setAnimation(e.target.checked);
-            this._renderAnimateToggle();
-        });
-        
-        this.hideToggle.addEventListener('change', (e) => {
-            this.progress.setVisibility(!e.target.checked);
-            this._renderHideToggle();
-        });
-    }
+    static #DIGITS = /^\d*$/;
 
-    _renderProgressBarValue() {
-        this.valueInput.value = this.progress.value;
-        this.progressBar.style.background = 
-            `conic-gradient(#005dff ${this.progress.getAngle()}deg, #eef3f6 0deg)`;
-    }
+    #progress;
+    #valueInput;
+    #animateToggle;
+    #hideToggle;
 
-    _renderAnimateToggle() {
-        this.animateToggle.checked = this.progress.isAnimated;
-        this.progressBar.classList.toggle('progress-bar-animated', this.progress.isAnimated);
-    }
-
-    _renderHideToggle() {
-        this.hideToggle.checked = this.progress.isHidden;
-        if (this.progress.isHidden) {
-            this.progressBar.style.background = "unset";
-        } else {
-            this.progressBar.style.background =
-                `conic-gradient(#005dff ${this.progress.getAngle()}deg, #eef3f6 0deg)`;
+    #controller = new AbortController();
+    
+    constructor(root) {
+        if (!(root instanceof Element)) {
+            throw new TypeError('App: root должен быть DOM-элементом');
         }
+
+        const progressRoot = root.querySelector(App.#PROGRESS_SELECTOR);
+        this.#valueInput = root.querySelector(App.#VALUE_SELECTOR);
+        this.#animateToggle = root.querySelector(App.#ANIMATE_SELECTOR);
+        this.#hideToggle = root.querySelector(App.#HIDE_SELECTOR);
+
+        if (!(progressRoot instanceof Element)) {
+            throw new TypeError(`App: ${App.#PROGRESS_SELECTOR} должен быть DOM-элементом`);
+        }
+        if (!(this.#valueInput instanceof HTMLInputElement)) {
+            throw new TypeError(`App: ${App.#VALUE_SELECTOR} должен быть input`);
+        }
+        if (!(this.#animateToggle instanceof HTMLInputElement)) {
+            throw new TypeError(`App: ${App.#ANIMATE_SELECTOR} должен быть input`);
+        }
+        if (!(this.#hideToggle instanceof HTMLInputElement)) {
+            throw new TypeError(`App: ${App.#HIDE_SELECTOR} должен быть input`);
+        }
+
+        this.#progress = new Progress(progressRoot);
+
+        this.#setValueInputAttributes();
+        this.#bindEvents();
+        this.#syncControls();
     }
 
     setValue(value) {
-        this.progress.setValue(Number(value) || 0);
-        this._renderProgressBarValue();
+        this.#progress.setValue(value);
+        this.#syncControls();
+        return this;
     }
 
-    toggleAnimation() {
-        this.progress.setAnimation(!this.progress.isAnimated);
-        this._renderAnimateToggle();
+    setAnimated(animated) {
+        this.#progress.setAnimated(animated);
+        this.#syncControls();
+        return this;
     }
 
-    toggleVisibility() {
-        this.progress.setVisibility(this.progress.isHidden);
-        this._renderHideToggle();
+    setHidden(hidden) {
+        this.#progress.setHidden(hidden);
+        this.#syncControls();
+        return this;
+    }
+
+    destroy() {
+        this.#controller.abort();
+        this.#progress.destroy();
+    }
+
+    #setValueInputAttributes() {
+        this.#valueInput.setAttribute('min', this.#progress.getMin());
+        this.#valueInput.setAttribute('max', this.#progress.getMax());
+    }
+
+    #bindEvents() {
+        const { signal } = this.#controller;
+        this.#valueInput.addEventListener('beforeinput', (event) => this.#onValueBeforeInput(event), {signal});
+        this.#valueInput.addEventListener('input', () => this.#onValueInput(), {signal});
+        this.#animateToggle.addEventListener('change', () => this.#onAnimateChange(), {signal});
+        this.#hideToggle.addEventListener('change', () => this.#onHideChange(), {signal});
+    }
+
+    #onValueBeforeInput(event) {
+        const data = event.data ?? event.dataTransfer?.getData('text');
+        if (data && !App.#DIGITS.test(data)) {
+            event.preventDefault();
+        }
+    }
+
+    #onValueInput() {
+        const value = this.#valueInput.valueAsNumber;
+        this.#progress.setValue(Number.isNaN(value) ? this.#progress.getMin() : value);
+        this.#syncValueInput();
+    }
+
+    #syncValueInput() {
+        const value = String(this.#progress.getValue());
+        if (this.#valueInput.value !== value) {
+            this.#valueInput.value = value;
+        }
+    }
+
+    #onAnimateChange() {
+        this.#progress.setAnimated(this.#animateToggle.checked);
+    }
+
+    #onHideChange() {
+        this.#progress.setHidden(this.#hideToggle.checked);
+    }
+
+    #syncControls() {
+        this.#syncValueInput();
+        this.#animateToggle.checked = this.#progress.isAnimated();
+        this.#hideToggle.checked = this.#progress.isHidden();
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    window.app = new App();
-});
+window.app = new App(document.querySelector('.panel'));
