@@ -35,7 +35,7 @@ CSS-переменные, панель .panel, поле ввода .field и п�
 - .progress_hidden - модификатор скрытия, использует visibility: hidden,
   поэтому при пропадании шкала продолжает сохраняет место.
 
-#### progress/progress.js - класс Progress
+#### progress/progress.js
 
 Статические поля:
 - MIN_VALUE, MAX_VALUE - публичные значения диапазона шкалы (по умолчанию 0 и 100);
